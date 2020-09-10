@@ -5,15 +5,20 @@ export default function App() {
 
   useEffect(async () => {
     const response = await fetch(
-      "https://api.github.com/users/jeanmauricio96/repo"
+      "https://api.github.com/users/jeanmauricio96/repos"
     );
     const data = await response.json();
     setRepositories(data);
   }, []);
 
+  useEffect(() => {
+    const filtered = repositories.filter((repo) => repo.favorite);
+    document.title = `You are ${filtered.length} favorites.`;
+  }, [repositories]);
+
   function handleFavorite(id) {
     const newRepositoreis = repositories.map((repo) => {
-      return repo.id === id ? { ...repo, favorite: true } : repo;
+      return repo.id === id ? { ...repo, favorite: !repo.favorite } : repo;
     });
     setRepositories(newRepositoreis);
   }
